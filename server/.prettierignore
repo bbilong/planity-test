@@ -1,0 +1,11 @@
+node_modules/
+/coverage*
+/.vscode
+/public
+
+# No parser
+Dockerfile
+.dockerignore
+.gitignore
+.prettierignore
+yarn.lock
