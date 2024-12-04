@@ -8,8 +8,18 @@ export const ProcessCsv = (filePath: string): Promise<void> => {
     const maleStream = fs.createWriteStream('male.csv');
     const femaleStream = fs.createWriteStream('female.csv');
 
-    fs.createReadStream(filePath)
+    const readStream = fs.createReadStream(filePath);
+    let headers: string[] = [];
+
+    readStream
       .pipe(csvParser())
+      .on('headers', (headerList) => {
+        headers = headerList;
+        const headerLine = headers.join(',') + '\n';
+
+        maleStream.write(headerLine);
+        femaleStream.write(headerLine);
+      })
       .on('data', row => {
         if (row.gender === 'male') {
           maleStream.write(`${Object.values(row).join(',')}\n`);
